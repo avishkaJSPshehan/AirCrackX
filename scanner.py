@@ -2,6 +2,37 @@ import os
 import re
 import time
 
+from pyfiglet import Figlet
+from rich.console import Console
+
+
+def get_wifi_details():
+    """Fetches and displays the currently connected Wi-Fi SSID and other network details."""
+    
+    # Run netsh command to get interface details
+    output = os.popen("netsh wlan show interfaces").read()
+    
+    # Extract details using regex
+    ssid_match = re.search(r"SSID\s*:\s(.+)", output)
+    bssid_match = re.search(r"BSSID\s*:\s(.+)", output)
+    signal_match = re.search(r"Signal\s*:\s([\d]+)%?", output)
+    radio_match = re.search(r"Radio type\s*:\s(.+)", output)
+    auth_match = re.search(r"Authentication\s*:\s(.+)", output)
+    cipher_match = re.search(r"Cipher\s*:\s(.+)", output)
+    
+    # Display results
+    if ssid_match:
+        print("\n📡 **Connected Wi-Fi Details** 📡")
+        print(f"🔹 SSID (Network Name)   : {ssid_match.group(1).strip()}")
+        print(f"🔹 BSSID (Router MAC)    : {bssid_match.group(1).strip() if bssid_match else 'N/A'}")
+        print(f"🔹 Signal Strength       : {signal_match.group(1).strip()}%" if signal_match else "N/A")
+        print(f"🔹 Radio Type           : {radio_match.group(1).strip() if radio_match else 'N/A'}")
+        print(f"🔹 Authentication Type  : {auth_match.group(1).strip() if auth_match else 'N/A'}")
+        print(f"🔹 Cipher Type         : {cipher_match.group(1).strip() if cipher_match else 'N/A'}")
+    else:
+        print("❌ Not connected to any Wi-Fi network.")
+
+
 def scan_wifi():
     """Scans available Wi-Fi networks and returns them as a list of (SSID, Signal Strength)."""
     output = os.popen("netsh wlan show networks mode=Bssid").read()
@@ -83,6 +114,22 @@ def check_wifi_status(expected_ssid):
     return False
 
 # Main Execution
+
+
+console = Console()
+
+figlet = Figlet(font='big')
+text = figlet.renderText("              AirCrackX")
+
+# Print colored text using Rich
+console.print(f"[cyan]{text}[/cyan]")
+console.print(f"[cyan]{"----------------------------------------------------------------------------------------"}[/cyan]")
+
+
+get_wifi_details()
+
+console.print(f"[cyan]{"----------------------------------------------------------------------------------------"}[/cyan]")
+
 wifi_networks = scan_wifi()
 
 if wifi_networks:
