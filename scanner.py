@@ -22,15 +22,14 @@ def get_wifi_details():
     
     # Display results
     if ssid_match:
-        print("\n📡 **Connected Wi-Fi Details** 📡")
-        print(f"🔹 SSID (Network Name)   : {ssid_match.group(1).strip()}")
-        print(f"🔹 BSSID (Router MAC)    : {bssid_match.group(1).strip() if bssid_match else 'N/A'}")
-        print(f"🔹 Signal Strength       : {signal_match.group(1).strip()}%" if signal_match else "N/A")
-        print(f"🔹 Radio Type           : {radio_match.group(1).strip() if radio_match else 'N/A'}")
-        print(f"🔹 Authentication Type  : {auth_match.group(1).strip() if auth_match else 'N/A'}")
-        print(f"🔹 Cipher Type         : {cipher_match.group(1).strip() if cipher_match else 'N/A'}")
+        print(f"                    SSID (Network Name)   : {ssid_match.group(1).strip()}")
+        print(f"                    BSSID (Router MAC)    : {bssid_match.group(1).strip() if bssid_match else 'N/A'}")
+        print(f"                    Signal Strength       : {signal_match.group(1).strip()}%" if signal_match else "N/A")
+        print(f"                    Radio Type            : {radio_match.group(1).strip() if radio_match else 'N/A'}")
+        print(f"                    Authentication Type   : {auth_match.group(1).strip() if auth_match else 'N/A'}")
+        print(f"                    Cipher Type           : {cipher_match.group(1).strip() if cipher_match else 'N/A'}")
     else:
-        print("❌ Not connected to any Wi-Fi network.")
+        print("                      Not connected to any Wi-Fi network.")
 
 
 def scan_wifi():
@@ -113,9 +112,36 @@ def check_wifi_status(expected_ssid):
 
     return False
 
+def show_availble_wifi_networks(wifi_networks):
+    
+    if wifi_networks:
+        print("\nAvailable Wi-Fi Networks:")
+        for index, (ssid, signal) in enumerate(wifi_networks, start=1):
+            print(f"{index}. SSID: {ssid} | Signal Strength: {signal}%")
+
+        # Ask the user to select a network
+        try:
+            choice = int(input("\nEnter the number of the Wi-Fi network you want to connect to: "))
+            if 1 <= choice <= len(wifi_networks):
+                selected_ssid = wifi_networks[choice - 1][0]
+                wifi_password = input(f"Enter password for '{selected_ssid}': ")
+                connect_to_wifi(selected_ssid, wifi_password)
+            else:
+                print("Invalid choice. Please run the script again and select a valid option.")
+        except ValueError:
+            print("Invalid input. Please enter a valid number.")
+    else:
+        print("No Wi-Fi networks found.")
+
+def help():
+    print("\n")
+    print(" - help             : Displays this page")
+    print(" - scan             : Performs a WI-FI scan")
+    print(" - attack           : Attacks selected WI-FI")
+    print(" - exit             : Close the program")
+
+    return
 # Main Execution
-
-
 console = Console()
 
 figlet = Figlet(font='big')
@@ -125,28 +151,24 @@ text = figlet.renderText("              AirCrackX")
 console.print(f"[cyan]{text}[/cyan]")
 console.print(f"[cyan]{"----------------------------------------------------------------------------------------"}[/cyan]")
 
-
 get_wifi_details()
 
 console.print(f"[cyan]{"----------------------------------------------------------------------------------------"}[/cyan]")
 
 wifi_networks = scan_wifi()
 
-if wifi_networks:
-    print("\nAvailable Wi-Fi Networks:")
-    for index, (ssid, signal) in enumerate(wifi_networks, start=1):
-        print(f"{index}. SSID: {ssid} | Signal Strength: {signal}%")
 
-    # Ask the user to select a network
-    try:
-        choice = int(input("\nEnter the number of the Wi-Fi network you want to connect to: "))
-        if 1 <= choice <= len(wifi_networks):
-            selected_ssid = wifi_networks[choice - 1][0]
-            wifi_password = input(f"Enter password for '{selected_ssid}': ")
-            connect_to_wifi(selected_ssid, wifi_password)
-        else:
-            print("Invalid choice. Please run the script again and select a valid option.")
-    except ValueError:
-        print("Invalid input. Please enter a valid number.")
-else:
-    print("No Wi-Fi networks found.")
+print("\nType 'help' for more info...")
+
+
+
+while(True):
+    command = input("\nAirCrackX $- ")
+
+    if (command == 'help'):
+        help()
+    elif (command == 'scan'):
+        show_availble_wifi_networks(wifi_networks)
+    elif (command == 'exit'):
+        break
+
