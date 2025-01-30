@@ -1,5 +1,10 @@
 from pyfiglet import Figlet
+from rich.console import Console
+
+console = Console()
 
 figlet = Figlet(font='big')
-print(figlet.renderText("AirCrackX"))
+text = figlet.renderText("AirCrackX")
 
+# Print colored text using Rich
+console.print(f"[red]{text}[/red]")
