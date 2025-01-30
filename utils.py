@@ -7,4 +7,4 @@ figlet = Figlet(font='big')
 text = figlet.renderText("AirCrackX")
 
 # Print colored text using Rich
-console.print(f"[red]{text}[/red]")
+console.print(f"[cyan]{text}[/cyan]")
