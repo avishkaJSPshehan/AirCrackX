@@ -4,6 +4,10 @@ import time
 
 from pyfiglet import Figlet
 from rich.console import Console
+from tabulate import tabulate
+from colorama import init, Fore
+
+init()
 
 
 def get_wifi_details():
@@ -112,12 +116,17 @@ def check_wifi_status(expected_ssid):
 
     return False
 
-def show_availble_wifi_networks(wifi_networks):
+
+def show_available_wifi_networks(wifi_networks):
+    """Display available Wi-Fi networks in a table format."""
     
     if wifi_networks:
+        # Convert data into a tabular format
+        table_data = [[index + 1, ssid, f"{signal}%"] for index, (ssid, signal) in enumerate(wifi_networks)]
+        headers = ["No.", "SSID (Network Name)", "Signal Strength"]
+
         print("\nAvailable Wi-Fi Networks:")
-        for index, (ssid, signal) in enumerate(wifi_networks, start=1):
-            print(f"{index}. SSID: {ssid} | Signal Strength: {signal}%")
+        print(tabulate(table_data, headers=headers, tablefmt="grid"))  # You can change "grid" to "plain", "pipe", etc.
 
         # Ask the user to select a network
         try:
@@ -163,12 +172,12 @@ print("\nType 'help' for more info...")
 
 
 while(True):
-    command = input("\nAirCrackX $- ")
+    command = input(Fore.CYAN + "\nAirCrackX $- ")
 
     if (command == 'help'):
         help()
     elif (command == 'scan'):
-        show_availble_wifi_networks(wifi_networks)
+        show_available_wifi_networks(wifi_networks)
     elif (command == 'exit'):
         break
 
