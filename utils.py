@@ -1,5 +1,6 @@
 from pyfiglet import Figlet
 from rich.console import Console
+import itertools
 
 console = Console()
 
@@ -8,3 +9,5 @@ text = figlet.renderText("AirCrackX")
 
 # Print colored text using Rich
 console.print(f"[cyan]{text}[/cyan]")
+
+
