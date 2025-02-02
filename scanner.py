@@ -9,6 +9,8 @@ from colorama import init, Fore
 
 init()
 
+password_list = []
+
 
 def get_wifi_details():
     """Fetches and displays the currently connected Wi-Fi SSID and other network details."""
@@ -101,9 +103,9 @@ def connect_to_wifi(ssid, password):
 
     # Check if the connection is successful
     if check_wifi_status(ssid):
-        print(f"✅ Successfully connected to '{ssid}'.")
+        print(f"Successfully connected to '{ssid}'.")
     else:
-        print(f"❌ Not Connected or Wrong Password for '{ssid}'.")
+        print(f"Not Connected or Wrong Password for '{ssid}'.")
 
 def check_wifi_status(expected_ssid):
     """Checks if the system is connected to the specified Wi-Fi SSID."""
@@ -115,6 +117,7 @@ def check_wifi_status(expected_ssid):
         return current_ssid == expected_ssid  # Check if connected to the desired SSID
 
     return False
+
 
 
 def show_available_wifi_networks(wifi_networks):
