@@ -96,7 +96,7 @@ def connect_to_wifi(ssid, password):
     # Connect to the Wi-Fi network
     os.system(f'netsh wlan connect name="{ssid}"')
 
-    print(f"\nConnecting to {ssid}...")
+    print(f"\nConnecting to {ssid}... using {password}")
     
     # Wait a few seconds for connection attempt
     time.sleep(5)
@@ -104,8 +104,12 @@ def connect_to_wifi(ssid, password):
     # Check if the connection is successful
     if check_wifi_status(ssid):
         print(f"Successfully connected to '{ssid}'.")
+
+        return True
     else:
         print(f"Not Connected or Wrong Password for '{ssid}'.")
+
+        return False
 
 def check_wifi_status(expected_ssid):
     """Checks if the system is connected to the specified Wi-Fi SSID."""
@@ -134,6 +138,7 @@ def show_available_wifi_networks(wifi_networks):
         # Ask the user to select a network
         try:
             choice = int(input("\nEnter the number of the Wi-Fi network you want to connect to: "))
+            print(type(choice))
             if 1 <= choice <= len(wifi_networks):
 
                 password_list = []
@@ -144,17 +149,19 @@ def show_available_wifi_networks(wifi_networks):
                 for i in l1:
                     new_password,emptySpace,extra = i.split(" ")
                     password_list.append(new_password)
+                
 
-                print(password_list)
+                for password in password_list:
+                    selected_ssid = wifi_networks[choice - 1][0]
+                    wifi_password = password
+                    is_connected = connect_to_wifi(selected_ssid, wifi_password)
 
-
-                selected_ssid = wifi_networks[choice - 1][0]
-                wifi_password = input(f"Enter password for '{selected_ssid}': ")
-                connect_to_wifi(selected_ssid, wifi_password)
+                    if (is_connected):
+                        break
             else:
                 print("Invalid choice. Please run the script again and select a valid option.")
-        except ValueError:
-            print("Invalid input. Please enter a valid number.")
+        except ValueError as e:
+            print(f"Invalid input. Please enter a valid number. : {e}")
     else:
         print("No Wi-Fi networks found.")
 
