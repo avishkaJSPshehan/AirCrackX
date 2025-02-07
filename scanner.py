@@ -135,6 +135,19 @@ def show_available_wifi_networks(wifi_networks):
         try:
             choice = int(input("\nEnter the number of the Wi-Fi network you want to connect to: "))
             if 1 <= choice <= len(wifi_networks):
+
+                password_list = []
+
+                file = open("password.txt","r")
+
+                l1 = file.readlines()
+                for i in l1:
+                    new_password,emptySpace,extra = i.split(" ")
+                    password_list.append(new_password)
+
+                print(password_list)
+
+
                 selected_ssid = wifi_networks[choice - 1][0]
                 wifi_password = input(f"Enter password for '{selected_ssid}': ")
                 connect_to_wifi(selected_ssid, wifi_password)
